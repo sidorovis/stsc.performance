@@ -39,6 +39,10 @@
     	  	<id>stsc-general-test-mvn-repo</id>
      		<url>https://raw.github.com/sidorovis/stsc/stsc.general/</url>
    		</repository>
+	    <repository>
+    	  	<id>stsc-stocks-yahoo-core-test-mvn-repo</id>
+     		<url>https://raw.github.com/sidorovis/stsc/stsc.stocks.yahoo.core/</url>
+   		</repository>
 	</repositories>
 
   <build>
