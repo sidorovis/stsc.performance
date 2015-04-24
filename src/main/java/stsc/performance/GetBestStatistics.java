@@ -10,11 +10,17 @@ import org.joda.time.LocalDate;
 import stsc.common.FromToPeriod;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.multistarter.*;
+import stsc.general.simulator.multistarter.AlgorithmSettingsIteratorFactory;
+import stsc.general.simulator.multistarter.BadParameterException;
+import stsc.general.simulator.multistarter.MpDouble;
+import stsc.general.simulator.multistarter.MpInteger;
+import stsc.general.simulator.multistarter.MpString;
+import stsc.general.simulator.multistarter.MpSubExecution;
+import stsc.general.simulator.multistarter.StrategySearcherException;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
-import stsc.general.statistic.Statistics;
+import stsc.general.statistic.Metrics;
 import stsc.general.statistic.StatisticsByCostSelector;
 import stsc.general.statistic.StrategySelector;
 import stsc.general.statistic.cost.function.CostWeightedSumFunction;
@@ -93,9 +99,9 @@ final class GetBestStatistics {
 	}
 
 	private static boolean printStatistics(String prefix, TradingStrategy ts) {
-		Statistics s = ts.getStatistics();
-		System.out.println(prefix + "\t" + df.format(s.getAvGain()) + "\t" + df.format(s.getWinProb()) + "\t" + df.format(s.getFreq()) + "\t"
-				+ df.format(s.getKelly()) + "\t\t" + ts.getSettings().stringHashCode());
+		final Metrics s = ts.getMetrics();
+		System.out.println(prefix + "\t" + df.format(s.getMetric("avGain")) + "\t" + df.format(s.getMetric("winProb")) + "\t" + df.format(s.getMetric("freq"))
+				+ "\t" + df.format(s.getMetric("kelly")) + "\t\t" + ts.getSettings().stringHashCode());
 		return false;
 	}
 
