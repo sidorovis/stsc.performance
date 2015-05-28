@@ -21,10 +21,10 @@ import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFacto
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
 import stsc.general.statistic.Metrics;
-import stsc.general.statistic.StatisticsByCostSelector;
-import stsc.general.statistic.StrategySelector;
 import stsc.general.statistic.cost.function.CostWeightedSumFunction;
 import stsc.general.strategy.TradingStrategy;
+import stsc.general.strategy.selector.StatisticsByCostSelector;
+import stsc.general.strategy.selector.StrategySelector;
 import stsc.storage.AlgorithmsStorage;
 
 final class GetBestStatistics {
@@ -78,15 +78,16 @@ final class GetBestStatistics {
 		final SimulatorSettingsGeneticList list = settings.getList();
 
 		final CostWeightedSumFunction cf = new CostWeightedSumFunction();
-		cf.addParameter("getAvGain", 0.5);
-		cf.addParameter("getWinProb", 1000.0);
-		cf.addParameter("getKelly", 0.6);
-		cf.addParameter("getMaxLoss", -0.4);
-		cf.addParameter("getMonth12AvGain", 0.6);
+		cf.withParameter("getAvGain", 0.5);
+		cf.withParameter("getWinProb", 1000.0);
+		cf.withParameter("getKelly", 0.6);
+		cf.withParameter("getMaxLoss", -0.4);
+		cf.withParameter("getMonth12AvGain", 0.6);
 
-		final StrategyGeneticSearcher searcher = new StrategyGeneticSearcher(list, new StatisticsByCostSelector(populationSize, cf), thread, cf,
-				maxSelectionIndex, populationSize, bestPart, crossoverPart);
-		final StrategySelector selector = searcher.getSelector();
+		final StrategyGeneticSearcher searcher = StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withPopulationSize(N)
+				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf)).withThreadAmount(thread).withPopulationCostFunction(cf)
+				.withMaxPopulationsAmount(maxSelectionIndex).withBestPart(bestPart).withCrossoverPart(crossoverPart).build();
+		final StrategySelector selector = searcher.waitAndGetSelector();
 		final Iterator<TradingStrategy> ts = selector.getStrategies().iterator();
 		for (int i = 0; i < N; ++i) {
 			TradingStrategy ts1 = ts.next();

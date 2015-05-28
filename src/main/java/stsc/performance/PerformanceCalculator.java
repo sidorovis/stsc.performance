@@ -17,10 +17,10 @@ import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 import stsc.general.simulator.multistarter.grid.StrategyGridSearcher;
-import stsc.general.statistic.StatisticsByCostSelector;
-import stsc.general.statistic.StrategySelector;
 import stsc.general.statistic.cost.function.CostWeightedSumFunction;
 import stsc.general.strategy.TradingStrategy;
+import stsc.general.strategy.selector.StatisticsByCostSelector;
+import stsc.general.strategy.selector.StrategySelector;
 
 class PerformanceCalculator {
 
@@ -127,7 +127,7 @@ class PerformanceCalculator {
 		final TimeTracker timeTracker = new TimeTracker();
 
 		final StrategySearcher searcher = generateSearcher(threadSize, endOfPeriod);
-		final List<TradingStrategy> strategies = searcher.getSelector().getStrategies();
+		final List<TradingStrategy> strategies = searcher.waitAndGetSelector().getStrategies();
 		return createResult(strategies, timeTracker);
 	}
 
@@ -141,7 +141,8 @@ class PerformanceCalculator {
 		} else {
 			final SimulatorSettingsGeneticList list = SimulatorSettingsGenerator.getGeneticFactory(settings.performanceForGridTest, stockStorage,
 					settings.elements, startDate, endOfPeriod).getList();
-			return new StrategyGeneticSearcher(list, selector, threadSize, settings.maxSelectionIndex, settings.populationSize);
+			return StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withStrategySelector(selector).withThreadAmount(threadSize)
+					.withMaxPopulationsAmount(settings.maxSelectionIndex).withPopulationSize(settings.populationSize).build();
 		}
 	}
 
