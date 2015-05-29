@@ -20,6 +20,7 @@ import stsc.general.simulator.multistarter.StrategySearcherException;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
+import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
 import stsc.general.statistic.cost.function.CostWeightedSumFunction;
 import stsc.general.strategy.TradingStrategy;
@@ -78,11 +79,11 @@ final class GetBestStatistics {
 		final SimulatorSettingsGeneticList list = settings.getList();
 
 		final CostWeightedSumFunction cf = new CostWeightedSumFunction();
-		cf.withParameter("getAvGain", 0.5);
-		cf.withParameter("getWinProb", 1000.0);
-		cf.withParameter("getKelly", 0.6);
-		cf.withParameter("getMaxLoss", -0.4);
-		cf.withParameter("getMonth12AvGain", 0.6);
+		cf.withParameter(MetricType.avGain, 0.5);
+		cf.withParameter(MetricType.winProb, 1000.0);
+		cf.withParameter(MetricType.kelly, 0.6);
+		cf.withParameter(MetricType.maxLoss, -0.4);
+		cf.withParameter(MetricType.month12AvGain, 0.6);
 
 		final StrategyGeneticSearcher searcher = StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withPopulationSize(N)
 				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf)).withThreadAmount(thread).withPopulationCostFunction(cf)
@@ -101,8 +102,12 @@ final class GetBestStatistics {
 
 	private static boolean printStatistics(String prefix, TradingStrategy ts) {
 		final Metrics s = ts.getMetrics();
-		System.out.println(prefix + "\t" + df.format(s.getMetric("avGain")) + "\t" + df.format(s.getMetric("winProb")) + "\t" + df.format(s.getMetric("freq"))
-				+ "\t" + df.format(s.getMetric("kelly")) + "\t\t" + ts.getSettings().stringHashCode());
+		System.out.println(prefix + "\t" + //
+				df.format(s.getMetric(MetricType.avGain)) + "\t" + //
+				df.format(s.getMetric(MetricType.winProb)) + "\t" + //
+				df.format(s.getMetric(MetricType.freq)) + "\t" + //
+				df.format(s.getMetric(MetricType.kelly)) + "\t\t" + //
+				ts.getSettings().stringHashCode());
 		return false;
 	}
 

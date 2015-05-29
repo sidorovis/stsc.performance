@@ -149,7 +149,7 @@ class PerformanceCalculator {
 	private static PerformanceResult createResult(List<TradingStrategy> strategies, TimeTracker timeTracker) {
 		double sumGetAvGain = 0.0;
 		timeTracker.finish();
-		sumGetAvGain = strategies.get(0).getMetrics().getMetric("avGain");
+		sumGetAvGain = strategies.get(0).getAvGain();
 		// TODO strange comment should be deleted or returned back
 		// for (Statistics statistic : statistics) {
 		// sumGetAvGain += statistic.getAvGain();
