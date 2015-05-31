@@ -22,6 +22,7 @@ import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
 import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
+import stsc.general.statistic.cost.comparator.MetricsSameComparator;
 import stsc.general.statistic.cost.function.CostWeightedSumFunction;
 import stsc.general.strategy.TradingStrategy;
 import stsc.general.strategy.selector.StatisticsByCostSelector;
@@ -86,8 +87,8 @@ final class GetBestStatistics {
 		cf.withParameter(MetricType.month12AvGain, 0.6);
 
 		final StrategyGeneticSearcher searcher = StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withPopulationSize(N)
-				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf)).withThreadAmount(thread).withPopulationCostFunction(cf)
-				.withMaxPopulationsAmount(maxSelectionIndex).withBestPart(bestPart).withCrossoverPart(crossoverPart).build();
+				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf, new MetricsSameComparator())).withThreadAmount(thread)
+				.withPopulationCostFunction(cf).withMaxPopulationsAmount(maxSelectionIndex).withBestPart(bestPart).withCrossoverPart(crossoverPart).build();
 		final StrategySelector selector = searcher.waitAndGetSelector();
 		final Iterator<TradingStrategy> ts = selector.getStrategies().iterator();
 		for (int i = 0; i < N; ++i) {

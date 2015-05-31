@@ -17,6 +17,7 @@ import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 import stsc.general.simulator.multistarter.grid.StrategyGridSearcher;
+import stsc.general.statistic.cost.comparator.MetricsSameComparator;
 import stsc.general.statistic.cost.function.CostWeightedSumFunction;
 import stsc.general.strategy.TradingStrategy;
 import stsc.general.strategy.selector.StatisticsByCostSelector;
@@ -133,7 +134,7 @@ class PerformanceCalculator {
 
 	private StrategySearcher generateSearcher(int threadSize, String endOfPeriod) throws InterruptedException {
 		final String startDate = getDateRepresentation(settings.startOfPeriod);
-		final StrategySelector selector = new StatisticsByCostSelector(settings.storedStrategyAmount, new CostWeightedSumFunction());
+		final StrategySelector selector = new StatisticsByCostSelector(settings.storedStrategyAmount, new CostWeightedSumFunction(), new MetricsSameComparator());
 		if (settings.searcherType == SearcherType.GRID_SEARCHER) {
 			final SimulatorSettingsGridList list = SimulatorSettingsGenerator.getGridFactory(settings.performanceForGridTest, stockStorage, settings.elements,
 					startDate, endOfPeriod).getList();
