@@ -28,6 +28,7 @@ import stsc.general.strategy.TradingStrategy;
 import stsc.general.strategy.selector.StatisticsByCostSelector;
 import stsc.general.strategy.selector.StrategySelector;
 import stsc.storage.AlgorithmsStorage;
+import stsc.storage.mocks.StockStorageMock;
 
 final class GetBestStatistics {
 
@@ -41,7 +42,7 @@ final class GetBestStatistics {
 	static private double crossoverPart = 0.7;
 
 	static private SimulatorSettingsGeneticFactory getFactory() throws BadParameterException, BadAlgorithmException {
-		final StockStorage stockStorage = StockStorageSingleton.getInstance();
+		final StockStorage stockStorage = StockStorageMock.getStockStorage();
 		final LocalDate startOfPeriod = new LocalDate(2013, 1, 1);
 		final LocalDate endOfPeriod = new LocalDate(2014, 1, 1);
 
@@ -73,8 +74,8 @@ final class GetBestStatistics {
 		return settings.addEod("pnm", algoEodName("PositionNDayMStocks"), factoryPositionSide);
 	}
 
-	static private boolean lookForStrategy(int searchIndex, int N) throws IOException, BadAlgorithmException, InterruptedException, StrategySearcherException,
-			BadParameterException {
+	static private boolean lookForStrategy(int searchIndex, int N)
+			throws IOException, BadAlgorithmException, InterruptedException, StrategySearcherException, BadParameterException {
 		final SimulatorSettingsGeneticFactory settings = getFactory();
 
 		final SimulatorSettingsGeneticList list = settings.getList();
@@ -87,8 +88,8 @@ final class GetBestStatistics {
 		cf.withParameter(MetricType.month12AvGain, 0.6);
 
 		final StrategyGeneticSearcher searcher = StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withPopulationSize(N)
-				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf, new MetricsSameComparator())).withThreadAmount(thread)
-				.withPopulationCostFunction(cf).withMaxPopulationsAmount(maxSelectionIndex).withBestPart(bestPart).withCrossoverPart(crossoverPart).build();
+				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf, new MetricsSameComparator())).withThreadAmount(thread).withPopulationCostFunction(cf)
+				.withMaxPopulationsAmount(maxSelectionIndex).withBestPart(bestPart).withCrossoverPart(crossoverPart).build();
 		final StrategySelector selector = searcher.waitAndGetSelector();
 		final Iterator<TradingStrategy> ts = selector.getStrategies().iterator();
 		for (int i = 0; i < N; ++i) {
@@ -123,7 +124,6 @@ final class GetBestStatistics {
 	private static void initialize() {
 		try {
 			AlgorithmsStorage.getInstance();
-			StockStorageSingleton.getInstance("D:/dev/java/StscData/data/", "D:/dev/java/StscData/filtered_data");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

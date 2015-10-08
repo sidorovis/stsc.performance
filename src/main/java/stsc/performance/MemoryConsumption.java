@@ -16,11 +16,14 @@ import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFacto
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
+import stsc.storage.mocks.StockStorageMock;
 
 final class MemoryConsumption {
 
 	private static boolean warmUp = true;
 	private static boolean onlyReport = true;
+
+	private final static StockStorage stockStorage = StockStorageMock.getStockStorage();
 
 	static private String getDateRepresentation(LocalDate date) {
 		int day = date.getDayOfMonth();
@@ -37,13 +40,12 @@ final class MemoryConsumption {
 	}
 
 	private static void gridConsumptionCheck(long N, boolean testMemory) throws IOException {
-		final StockStorage stockStorage = StockStorageSingleton.getInstance();
 		final List<String> elements = Arrays.asList(new String[] { "open", "high", "low", "close", "value", "open", "high", "low", "close" });
 		final LocalDate startOfPeriod = new LocalDate(1970, 1, 1);
 		final LocalDate endOfPeriod = new LocalDate(2014, 1, 1);
 		final TimeTracker tt = new TimeTracker();
-		final SimulatorSettingsGridFactory factory = SimulatorSettingsGenerator.getGridFactory(false, stockStorage, elements,
-				getDateRepresentation(startOfPeriod), getDateRepresentation(endOfPeriod));
+		final SimulatorSettingsGridFactory factory = SimulatorSettingsGenerator.getGridFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
+				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGridList list = factory.getList();
 		final Iterator<SimulatorSettings> iterator = list.iterator();
@@ -71,13 +73,12 @@ final class MemoryConsumption {
 	}
 
 	static private void geneticRandomConsumptionCheck(long N, boolean testMemory) throws IOException, BadAlgorithmException {
-		final StockStorage stockStorage = StockStorageSingleton.getInstance();
 		final List<String> elements = Arrays.asList(new String[] { "open", "high", "low", "close", "value", "open", "high", "low", "close" });
 		final LocalDate startOfPeriod = new LocalDate(1970, 1, 1);
 		final LocalDate endOfPeriod = new LocalDate(2014, 1, 1);
 		final TimeTracker tt = new TimeTracker();
-		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements,
-				getDateRepresentation(startOfPeriod), getDateRepresentation(endOfPeriod));
+		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
+				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGeneticList list = factory.getList();
 		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
@@ -101,13 +102,12 @@ final class MemoryConsumption {
 	}
 
 	static private void geneticMergeConsumptionCheck(long N, boolean testMemory) throws IOException, BadAlgorithmException {
-		final StockStorage stockStorage = StockStorageSingleton.getInstance();
 		final List<String> elements = Arrays.asList(new String[] { "open", "high", "low", "close", "value", "open", "high", "low", "close" });
 		final LocalDate startOfPeriod = new LocalDate(1970, 1, 1);
 		final LocalDate endOfPeriod = new LocalDate(2014, 1, 1);
 		final TimeTracker tt = new TimeTracker();
-		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements,
-				getDateRepresentation(startOfPeriod), getDateRepresentation(endOfPeriod));
+		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
+				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGeneticList list = factory.getList();
 		SimulatorSettings left = list.generateRandom();
@@ -133,13 +133,12 @@ final class MemoryConsumption {
 	}
 
 	static private void geneticMutateConsumptionCheck(long N, boolean testMemory) throws IOException, BadAlgorithmException {
-		final StockStorage stockStorage = StockStorageSingleton.getInstance();
 		final List<String> elements = Arrays.asList(new String[] { "open", "high", "low", "close", "value", "open", "high", "low", "close" });
 		final LocalDate startOfPeriod = new LocalDate(1970, 1, 1);
 		final LocalDate endOfPeriod = new LocalDate(2014, 1, 1);
 		final TimeTracker tt = new TimeTracker();
-		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements,
-				getDateRepresentation(startOfPeriod), getDateRepresentation(endOfPeriod));
+		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
+				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGeneticList list = factory.getList();
 		SimulatorSettings left = list.generateRandom();

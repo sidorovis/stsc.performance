@@ -1,6 +1,5 @@
 package stsc.performance;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.joda.time.Days;
@@ -22,6 +21,7 @@ import stsc.general.statistic.cost.function.CostWeightedSumFunction;
 import stsc.general.strategy.TradingStrategy;
 import stsc.general.strategy.selector.StatisticsByCostSelector;
 import stsc.general.strategy.selector.StrategySelector;
+import stsc.storage.mocks.StockStorageMock;
 
 class PerformanceCalculator {
 
@@ -29,13 +29,9 @@ class PerformanceCalculator {
 
 	final private PerformanceCalculatorSettings settings;
 
-	private StockStorage loadStocks() throws ClassNotFoundException, IOException, InterruptedException {
-		return StockStorageSingleton.getInstance();
-	}
-
 	PerformanceCalculator(PerformanceCalculatorSettings settings) throws Exception {
 		this.settings = settings;
-		this.stockStorage = loadStocks();
+		this.stockStorage = StockStorageMock.getStockStorage();
 
 		if (settings.printAdditionalInfo && settings.searcherType == SearcherType.GENETIC_SEARCHER) {
 			System.out.print(settings.maxSelectionIndex + " " + settings.populationSize + " ");
@@ -85,8 +81,8 @@ class PerformanceCalculator {
 	}
 
 	static public void calculateAmountOfSimulations(StockStorage stockStorage, PerformanceCalculatorSettings settings) throws StrategySearcherException {
-		final SimulatorSettingsGridFactory factory = SimulatorSettingsGenerator.getGridFactory(settings.performanceForGridTest, stockStorage,
-				settings.elements, settings.getStartOfPeriod(), getDateRepresentation(settings.startOfPeriod.plusMonths(1)));
+		final SimulatorSettingsGridFactory factory = SimulatorSettingsGenerator.getGridFactory(settings.performanceForGridTest, stockStorage, settings.elements,
+				settings.getStartOfPeriod(), getDateRepresentation(settings.startOfPeriod.plusMonths(1)));
 		System.out.println("Simulation amount: " + factory.size());
 	}
 
@@ -123,8 +119,7 @@ class PerformanceCalculator {
 		return avTime;
 	}
 
-	public PerformanceResult timeForSearch(int threadSize, String endOfPeriod) throws StrategySearcherException, BadAlgorithmException, BadSignalException,
-			InterruptedException {
+	public PerformanceResult timeForSearch(int threadSize, String endOfPeriod) throws StrategySearcherException, BadAlgorithmException, BadSignalException, InterruptedException {
 		final TimeTracker timeTracker = new TimeTracker();
 
 		final StrategySearcher searcher = generateSearcher(threadSize, endOfPeriod);
@@ -136,12 +131,12 @@ class PerformanceCalculator {
 		final String startDate = getDateRepresentation(settings.startOfPeriod);
 		final StrategySelector selector = new StatisticsByCostSelector(settings.storedStrategyAmount, new CostWeightedSumFunction(), new MetricsSameComparator());
 		if (settings.searcherType == SearcherType.GRID_SEARCHER) {
-			final SimulatorSettingsGridList list = SimulatorSettingsGenerator.getGridFactory(settings.performanceForGridTest, stockStorage, settings.elements,
-					startDate, endOfPeriod).getList();
+			final SimulatorSettingsGridList list = SimulatorSettingsGenerator
+					.getGridFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
 			return new StrategyGridSearcher(list, selector, threadSize);
 		} else {
-			final SimulatorSettingsGeneticList list = SimulatorSettingsGenerator.getGeneticFactory(settings.performanceForGridTest, stockStorage,
-					settings.elements, startDate, endOfPeriod).getList();
+			final SimulatorSettingsGeneticList list = SimulatorSettingsGenerator
+					.getGeneticFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
 			return StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withStrategySelector(selector).withThreadAmount(threadSize)
 					.withMaxPopulationsAmount(settings.maxSelectionIndex).withPopulationSize(settings.populationSize).build();
 		}

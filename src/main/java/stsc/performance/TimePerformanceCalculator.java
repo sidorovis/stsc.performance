@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import stsc.storage.AlgorithmsStorage;
+import stsc.storage.mocks.StockStorageMock;
 
 class TimePerformanceCalculator {
 
@@ -12,7 +13,7 @@ class TimePerformanceCalculator {
 	private static void initialize() {
 		try {
 			AlgorithmsStorage.getInstance();
-			StockStorageSingleton.getInstance("D:/dev/java/StscData/data/", "D:/dev/java/StscData/filtered_data");
+			StockStorageMock.getStockStorage();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
