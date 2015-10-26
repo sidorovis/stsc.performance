@@ -14,6 +14,7 @@ import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
 import stsc.storage.mocks.StockStorageMock;
@@ -109,7 +110,7 @@ final class MemoryConsumption {
 		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
-		final SimulatorSettingsGeneticList list = factory.getList();
+		final SimulatorSettingsGeneticListImpl list = factory.getList();
 		SimulatorSettings left = list.generateRandom();
 		SimulatorSettings right = list.generateRandom();
 		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
@@ -140,7 +141,7 @@ final class MemoryConsumption {
 		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
-		final SimulatorSettingsGeneticList list = factory.getList();
+		final SimulatorSettingsGeneticListImpl list = factory.getList();
 		SimulatorSettings left = list.generateRandom();
 		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {

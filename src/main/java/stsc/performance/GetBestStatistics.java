@@ -18,7 +18,7 @@ import stsc.general.simulator.multistarter.MpString;
 import stsc.general.simulator.multistarter.MpSubExecution;
 import stsc.general.simulator.multistarter.StrategySearcherException;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
 import stsc.general.statistic.MetricType;
 import stsc.general.statistic.Metrics;
@@ -78,7 +78,7 @@ final class GetBestStatistics {
 			throws IOException, BadAlgorithmException, InterruptedException, StrategySearcherException, BadParameterException {
 		final SimulatorSettingsGeneticFactory settings = getFactory();
 
-		final SimulatorSettingsGeneticList list = settings.getList();
+		final SimulatorSettingsGeneticListImpl list = settings.getList();
 
 		final CostWeightedSumFunction cf = new CostWeightedSumFunction();
 		cf.withParameter(MetricType.avGain, 0.5);

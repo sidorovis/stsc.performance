@@ -11,7 +11,7 @@ import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.multistarter.StrategySearcher;
 import stsc.general.simulator.multistarter.StrategySearcherException;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.simulator.multistarter.genetic.StrategyGeneticSearcher;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
@@ -135,7 +135,7 @@ class PerformanceCalculator {
 					.getGridFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
 			return new StrategyGridSearcher(list, selector, threadSize);
 		} else {
-			final SimulatorSettingsGeneticList list = SimulatorSettingsGenerator
+			final SimulatorSettingsGeneticListImpl list = SimulatorSettingsGenerator
 					.getGeneticFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
 			return StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withStrategySelector(selector).withThreadAmount(threadSize)
 					.withMaxPopulationsAmount(settings.maxSelectionIndex).withPopulationSize(settings.populationSize).build();
