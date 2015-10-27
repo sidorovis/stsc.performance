@@ -12,8 +12,9 @@ import stsc.common.TimeTracker;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
 import stsc.general.simulator.SimulatorSettings;
+import stsc.general.simulator.SimulatorSettingsImpl;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
-import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticList;
+import stsc.general.simulator.multistarter.genetic.GeneticList;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridFactory;
 import stsc.general.simulator.multistarter.grid.SimulatorSettingsGridList;
@@ -49,8 +50,8 @@ final class MemoryConsumption {
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGridList list = factory.getList();
-		final Iterator<SimulatorSettings> iterator = list.iterator();
-		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
+		final Iterator<SimulatorSettingsImpl> iterator = list.iterator();
+		final ArrayList<SimulatorSettingsImpl> settings = new ArrayList<SimulatorSettingsImpl>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {
 			if (!iterator.hasNext()) {
 				break;
@@ -58,7 +59,7 @@ final class MemoryConsumption {
 			if (!testMemory && (i % 1000000 == 0) && !onlyReport) {
 				System.out.println(" " + i + " " + TimeTracker.lengthInSeconds(tt.lengthNonStop()));
 			}
-			final SimulatorSettings setting = iterator.next();
+			final SimulatorSettingsImpl setting = iterator.next();
 			if (testMemory)
 				settings.add(setting);
 		}
@@ -81,7 +82,7 @@ final class MemoryConsumption {
 		final SimulatorSettingsGeneticFactory factory = SimulatorSettingsGenerator.getGeneticFactory(false, stockStorage, elements, getDateRepresentation(startOfPeriod),
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
-		final SimulatorSettingsGeneticList list = factory.getList();
+		final GeneticList list = factory.getList();
 		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {
 			if (!testMemory && (i % 1000000 == 0) && !onlyReport) {

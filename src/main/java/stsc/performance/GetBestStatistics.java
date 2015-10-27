@@ -87,7 +87,7 @@ final class GetBestStatistics {
 		cf.withParameter(MetricType.maxLoss, -0.4);
 		cf.withParameter(MetricType.month12AvGain, 0.6);
 
-		final StrategyGeneticSearcher searcher = StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withPopulationSize(N)
+		final StrategyGeneticSearcher searcher = StrategyGeneticSearcher.getBuilder().withGeneticList(list).withPopulationSize(N)
 				.withStrategySelector(new StatisticsByCostSelector(populationSize, cf, new MetricsSameComparator())).withThreadAmount(thread).withPopulationCostFunction(cf)
 				.withMaxPopulationsAmount(maxSelectionIndex).withBestPart(bestPart).withCrossoverPart(crossoverPart).build();
 		final StrategySelector selector = searcher.waitAndGetSelector();

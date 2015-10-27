@@ -137,7 +137,7 @@ class PerformanceCalculator {
 		} else {
 			final SimulatorSettingsGeneticListImpl list = SimulatorSettingsGenerator
 					.getGeneticFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
-			return StrategyGeneticSearcher.getBuilder().withSimulatorSettings(list).withStrategySelector(selector).withThreadAmount(threadSize)
+			return StrategyGeneticSearcher.getBuilder().withGeneticList(list).withStrategySelector(selector).withThreadAmount(threadSize)
 					.withMaxPopulationsAmount(settings.maxSelectionIndex).withPopulationSize(settings.populationSize).build();
 		}
 	}
