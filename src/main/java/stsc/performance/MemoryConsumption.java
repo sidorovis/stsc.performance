@@ -11,8 +11,8 @@ import org.joda.time.LocalDate;
 import stsc.common.TimeTracker;
 import stsc.common.algorithms.BadAlgorithmException;
 import stsc.common.storage.StockStorage;
-import stsc.general.simulator.SimulatorSettings;
-import stsc.general.simulator.SimulatorSettingsImpl;
+import stsc.general.simulator.SimulatorConfiguration;
+import stsc.general.simulator.SimulatorConfigurationImpl;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticFactory;
 import stsc.general.simulator.multistarter.genetic.GeneticList;
 import stsc.general.simulator.multistarter.genetic.SimulatorSettingsGeneticListImpl;
@@ -50,8 +50,8 @@ final class MemoryConsumption {
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGridList list = factory.getList();
-		final Iterator<SimulatorSettingsImpl> iterator = list.iterator();
-		final ArrayList<SimulatorSettingsImpl> settings = new ArrayList<SimulatorSettingsImpl>((int) Math.min(100000, N));
+		final Iterator<SimulatorConfigurationImpl> iterator = list.iterator();
+		final ArrayList<SimulatorConfigurationImpl> settings = new ArrayList<SimulatorConfigurationImpl>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {
 			if (!iterator.hasNext()) {
 				break;
@@ -59,7 +59,7 @@ final class MemoryConsumption {
 			if (!testMemory && (i % 1000000 == 0) && !onlyReport) {
 				System.out.println(" " + i + " " + TimeTracker.lengthInSeconds(tt.lengthNonStop()));
 			}
-			final SimulatorSettingsImpl setting = iterator.next();
+			final SimulatorConfigurationImpl setting = iterator.next();
 			if (testMemory)
 				settings.add(setting);
 		}
@@ -83,12 +83,12 @@ final class MemoryConsumption {
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final GeneticList list = factory.getList();
-		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
+		final ArrayList<SimulatorConfiguration> settings = new ArrayList<SimulatorConfiguration>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {
 			if (!testMemory && (i % 1000000 == 0) && !onlyReport) {
 				System.out.println(" " + i + " " + TimeTracker.lengthInSeconds(tt.lengthNonStop()));
 			}
-			final SimulatorSettings setting = list.generateRandom();
+			final SimulatorConfiguration setting = list.generateRandom();
 			if (testMemory)
 				settings.add(setting);
 		}
@@ -112,14 +112,14 @@ final class MemoryConsumption {
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGeneticListImpl list = factory.getList();
-		SimulatorSettings left = list.generateRandom();
-		SimulatorSettings right = list.generateRandom();
-		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
+		SimulatorConfiguration left = list.generateRandom();
+		SimulatorConfiguration right = list.generateRandom();
+		final ArrayList<SimulatorConfiguration> settings = new ArrayList<SimulatorConfiguration>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {
 			if (!testMemory && (i % 1000000 == 0) && !onlyReport) {
 				System.out.println(" " + i + " " + TimeTracker.lengthInSeconds(tt.lengthNonStop()));
 			}
-			final SimulatorSettings setting = list.merge(left, right);
+			final SimulatorConfiguration setting = list.merge(left, right);
 			if (testMemory)
 				settings.add(setting);
 		}
@@ -143,13 +143,13 @@ final class MemoryConsumption {
 				getDateRepresentation(endOfPeriod));
 		final long size = factory.size();
 		final SimulatorSettingsGeneticListImpl list = factory.getList();
-		SimulatorSettings left = list.generateRandom();
-		final ArrayList<SimulatorSettings> settings = new ArrayList<SimulatorSettings>((int) Math.min(100000, N));
+		SimulatorConfiguration left = list.generateRandom();
+		final ArrayList<SimulatorConfiguration> settings = new ArrayList<SimulatorConfiguration>((int) Math.min(100000, N));
 		for (long i = 0; i < N; ++i) {
 			if (!testMemory && (i % 1000000 == 0) && !onlyReport) {
 				System.out.println(" " + i + " " + TimeTracker.lengthInSeconds(tt.lengthNonStop()));
 			}
-			final SimulatorSettings setting = list.mutate(left);
+			final SimulatorConfiguration setting = list.mutate(left);
 			if (testMemory)
 				settings.add(setting);
 		}
