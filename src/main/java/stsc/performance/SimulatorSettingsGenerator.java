@@ -21,8 +21,8 @@ import stsc.storage.AlgorithmsStorage;
 
 class SimulatorSettingsGenerator {
 
-	static SimulatorSettingsGridFactory getGridFactory(boolean performanceForGridTest, final StockStorage stockStorage,
-			final List<String> openTypes, final String periodFrom, final String periodTo) {
+	static SimulatorSettingsGridFactory getGridFactory(boolean performanceForGridTest, final StockStorage stockStorage, final List<String> openTypes, final String periodFrom,
+			final String periodTo) {
 		try {
 			final FromToPeriod period = new FromToPeriod(periodFrom, periodTo);
 			final SimulatorSettingsGridFactory settings = new SimulatorSettingsGridFactory(stockStorage, period);
@@ -36,8 +36,8 @@ class SimulatorSettingsGenerator {
 		return new SimulatorSettingsGridFactory(stockStorage, new FromToPeriod(new Date(), new Date()));
 	}
 
-	static SimulatorSettingsGeneticFactory getGeneticFactory(boolean performanceForGridTest, final StockStorage stockStorage,
-			final List<String> openTypes, final String periodFrom, final String periodTo) {
+	static SimulatorSettingsGeneticFactory getGeneticFactory(boolean performanceForGridTest, final StockStorage stockStorage, final List<String> openTypes, final String periodFrom,
+			final String periodTo) {
 		try {
 			final FromToPeriod period = new FromToPeriod(periodFrom, periodTo);
 			final SimulatorSettingsGeneticFactory settings = new SimulatorSettingsGeneticFactory(stockStorage, period);
@@ -51,27 +51,26 @@ class SimulatorSettingsGenerator {
 		return new SimulatorSettingsGeneticFactory(stockStorage, new FromToPeriod(new Date(), new Date()));
 	}
 
-	private static <T> void fillSmallIterator(SimulatorSettingsFactory<T> settings, final List<String> openTypes)
-			throws BadParameterException, BadAlgorithmException {
-		final AlgorithmSettingsIteratorFactory factoryIn = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+	private static <T> void fillSmallIterator(SimulatorSettingsFactory<T> settings, final List<String> openTypes) throws BadParameterException, BadAlgorithmException {
+		final AlgorithmSettingsIteratorFactory factoryIn = new AlgorithmSettingsIteratorFactory();
 		factoryIn.add(new MpString("e", openTypes));
 		settings.addStock("in", algoStockName("In"), factoryIn);
 
-		final AlgorithmSettingsIteratorFactory factoryEma = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryEma = new AlgorithmSettingsIteratorFactory();
 		factoryEma.add(new MpDouble("P", 0.1, 0.6, 0.6));
 		factoryEma.add(new MpSubExecution("", Arrays.asList(new String[] { "in" })));
 		settings.addStock("ema", algoStockName("Ema"), factoryEma);
 
-		final AlgorithmSettingsIteratorFactory factoryLevel = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryLevel = new AlgorithmSettingsIteratorFactory();
 		factoryLevel.add(new MpDouble("f", 15.0, 20.0, 5.0));
 		factoryLevel.add(new MpSubExecution("", Arrays.asList(new String[] { "ema" })));
 		settings.addStock("level", algoStockName("Level"), factoryLevel);
 
-		final AlgorithmSettingsIteratorFactory factoryOneSide = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryOneSide = new AlgorithmSettingsIteratorFactory();
 		factoryOneSide.add(new MpString("side", Arrays.asList(new String[] { "long", "short" })));
 		settings.addEod("os", algoEodName("OneSideOpenAlgorithm"), factoryOneSide);
 
-		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory();
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "ema", "level" })));
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "level", "ema" })));
 		factoryPositionSide.add(new MpInteger("n", 1, 32, 32));
@@ -80,27 +79,26 @@ class SimulatorSettingsGenerator {
 		settings.addEod("pnm", algoEodName("PositionNDayMStocks"), factoryPositionSide);
 	}
 
-	private static <T> void fillIterator(SimulatorSettingsFactory<T> settings, final List<String> openTypes) throws BadParameterException,
-			BadAlgorithmException {
-		final AlgorithmSettingsIteratorFactory factoryIn = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+	private static <T> void fillIterator(SimulatorSettingsFactory<T> settings, final List<String> openTypes) throws BadParameterException, BadAlgorithmException {
+		final AlgorithmSettingsIteratorFactory factoryIn = new AlgorithmSettingsIteratorFactory();
 		factoryIn.add(new MpString("e", openTypes));
 		settings.addStock("in", algoStockName("In"), factoryIn);
 
-		final AlgorithmSettingsIteratorFactory factoryEma = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryEma = new AlgorithmSettingsIteratorFactory();
 		factoryEma.add(new MpDouble("P", 0.1, 1.1, 0.05));
 		factoryEma.add(new MpSubExecution("", Arrays.asList(new String[] { "in" })));
 		settings.addStock("ema", algoStockName("Ema"), factoryEma);
 
-		final AlgorithmSettingsIteratorFactory factoryLevel = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryLevel = new AlgorithmSettingsIteratorFactory();
 		factoryLevel.add(new MpDouble("f", 15.0, 20.0, 0.01));
 		factoryLevel.add(new MpSubExecution("", Arrays.asList(new String[] { "ema" })));
 		settings.addStock("level", algoStockName("Level"), factoryLevel);
 
-		final AlgorithmSettingsIteratorFactory factoryOneSide = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryOneSide = new AlgorithmSettingsIteratorFactory();
 		factoryOneSide.add(new MpString("side", Arrays.asList(new String[] { "long", "short" })));
 		settings.addEod("os", algoEodName("OneSideOpenAlgorithm"), factoryOneSide);
 
-		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory();
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "ema", "level" })));
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "level", "ema" })));
 		factoryPositionSide.add(new MpInteger("n", 1, 32, 1));

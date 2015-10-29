@@ -50,21 +50,21 @@ final class GetBestStatistics {
 
 		final SimulatorSettingsGeneticFactory settings = new SimulatorSettingsGeneticFactory(stockStorage, period);
 
-		final AlgorithmSettingsIteratorFactory factoryIn = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryIn = new AlgorithmSettingsIteratorFactory();
 		factoryIn.add(new MpString("e", new String[] { "open", "close" }));
 		settings.addStock("in", algoStockName("In"), factoryIn);
 
-		final AlgorithmSettingsIteratorFactory factoryEma = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryEma = new AlgorithmSettingsIteratorFactory();
 		factoryEma.add(new MpDouble("P", 0.1, 1.11, 0.2));
 		factoryEma.add(new MpSubExecution("", Arrays.asList(new String[] { "in" })));
 		settings.addStock("ema", algoStockName("Ema"), factoryEma);
 
-		final AlgorithmSettingsIteratorFactory factorySma = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factorySma = new AlgorithmSettingsIteratorFactory();
 		factorySma.add(new MpDouble("n", 5, 15, 1));
 		factorySma.add(new MpSubExecution("", Arrays.asList(new String[] { "in" })));
 		settings.addStock("sma", algoStockName("Sma"), factorySma);
 
-		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory(settings.getPeriod());
+		final AlgorithmSettingsIteratorFactory factoryPositionSide = new AlgorithmSettingsIteratorFactory();
 		factoryPositionSide.add(new MpSubExecution("", Arrays.asList(new String[] { "ema", "sma" })));
 		factoryPositionSide.add(new MpInteger("n", 22, 250, 20));
 		factoryPositionSide.add(new MpInteger("m", 20, 40, 2));
