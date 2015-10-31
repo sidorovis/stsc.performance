@@ -119,7 +119,8 @@ class PerformanceCalculator {
 		return avTime;
 	}
 
-	public PerformanceResult timeForSearch(int threadSize, String endOfPeriod) throws StrategySearcherException, BadAlgorithmException, BadSignalException, InterruptedException {
+	public PerformanceResult timeForSearch(int threadSize, String endOfPeriod)
+			throws StrategySearcherException, BadAlgorithmException, BadSignalException, InterruptedException {
 		final TimeTracker timeTracker = new TimeTracker();
 
 		final StrategySearcher searcher = generateSearcher(threadSize, endOfPeriod);
@@ -129,11 +130,15 @@ class PerformanceCalculator {
 
 	private StrategySearcher generateSearcher(int threadSize, String endOfPeriod) throws InterruptedException {
 		final String startDate = getDateRepresentation(settings.startOfPeriod);
-		final StrategySelector selector = new StatisticsByCostSelector(settings.storedStrategyAmount, new CostWeightedSumFunction(), new MetricsSameComparator());
+		final StrategySelector selector = new StatisticsByCostSelector(settings.storedStrategyAmount, new CostWeightedSumFunction(),
+				new MetricsSameComparator());
 		if (settings.searcherType == SearcherType.GRID_SEARCHER) {
 			final SimulatorSettingsGridList list = SimulatorSettingsGenerator
 					.getGridFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
-			return new StrategyGridSearcher(list, selector, threadSize);
+			return StrategyGridSearcher.getBuilder(). //
+					setSimulatorSettingsGridList(list). //
+					setSelector(selector). //
+					setThreadAmount(threadSize).build();
 		} else {
 			final SimulatorSettingsGeneticListImpl list = SimulatorSettingsGenerator
 					.getGeneticFactory(settings.performanceForGridTest, stockStorage, settings.elements, startDate, endOfPeriod).getList();
